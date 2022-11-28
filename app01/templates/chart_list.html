@@ -1,0 +1,175 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default" style="margin-top: 50px">
+            <div class="panel-heading"></div>
+            <div class="panel-body">
+                <div id="m1" style="width: 100%; height: 400px;"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8" style="margin-top: 50px">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <div id="m2" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4" style="margin-top: 50px">
+                <div class="panel panel-default">
+                    <div class="panel-heading"></div>
+                    <div class="panel-body">
+                        <div id="m3" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/echarts.js' %}"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            initLine();
+            initBar();
+            initPie();
+        })
+
+        function initBar() {
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('m2'));
+
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: '社区住户健康状况',
+                    textAlign: 'auto',
+                    left: 'center',
+                },
+                tooltip: {},
+                legend: {
+                    data: [],  // 后台获取
+                    bottom: 0,
+                },
+                xAxis: {
+                    data: []  // 后台获取
+                },
+                yAxis: {},
+                series: []  // 后台获取
+            };
+
+            $.ajax({
+                url: '/chart/bar/',
+                type: 'get',
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        option.legend.data = res.data.legend;
+                        option.xAxis.data = res.data.x_axis;
+                        option.series = res.data.series_list;
+
+                        // 使用刚指定的配置项和数据显示图表。
+                        myChart.setOption(option);
+                    }
+
+
+                }
+            })
+
+
+        }
+
+        function initPie() {
+            var myChart = echarts.init(document.getElementById('m3'));
+            var option = {
+                title: {
+                    text: '医护人员和住户比例',
+                    subtext: '',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    bottom: 50,
+                    right: 90,
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [],
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            };
+
+            $.ajax({
+                url: '/chart/pie/',
+                type: 'get',
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        option.series[0].data = res.data;
+                        myChart.setOption(option);
+                    }
+                }
+            })
+
+        }
+
+        function initLine() {
+            var myChart = echarts.init(document.getElementById('m1'));
+            var option = {
+                title: {
+                    text: '各楼阳性人员统计',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: [],
+                    bottom: 0,
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: []
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: []
+            };
+            $.ajax({
+                url: '/chart/line/',
+                type: 'get',
+                dataType: 'JSON',
+                success: function (res) {
+                    if (res.status) {
+                        option.legend.data = res.data.legend;
+                        option.xAxis.data = res.data.x_axis;
+                        option.series = res.data.series_list;
+                        myChart.setOption(option);
+                    }
+                }
+            })
+
+        }
+
+
+    </script>
+{% endblock %}

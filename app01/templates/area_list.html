@@ -1,0 +1,283 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 15px" class="clearfix">
+            <input type="button" value="新建摄像头" style="margin-top: 10px" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+            <div style="float: right;width: 350px;">
+                <form method="get">
+                    <div class="input-group" style="margin-top: 10px">
+                        <input type="text" name="q" style="margin-left: 50px" class="form-control" placeholder="关键字"
+                               value="{{ search_data }}">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </button>
+                      </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <table class="table table-bordered" >
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>摄像头编号</th>
+                <th>大门</th>
+                <th>楼</th>
+                <th>层</th>
+                <th>电梯</th>
+                <th>户</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+                <tr uid="{{ obj.id }}">
+                    <th>{{ obj.id }}</th>
+                    <td>{{ obj.camera_id }}</td>
+                    <td>{{ obj.get_gate_display }}</td>
+                    <td>{{ obj.get_building_display }}</td>
+                    <td>{{ obj.get_floor_display }}</td>
+                    <td>{{ obj.get_lift_display }}</td>
+                    <td>{{ obj.get_household_display }}</td>
+                    <td>
+                        <input uid="{{ obj.id }}" class="btn btn-primary btn-xs btn-edit" type="button"  value="编辑">
+                        <input uid="{{ obj.id }}" class="btn btn-danger btn-xs btn-delete" type="button" value="删除">
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <ul class="pagination">
+            {{ page_string }}
+        </ul>
+    </div>
+
+    <!-- 新建/编辑的对话框 -->
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="myModalLabel">新建摄像头</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAdd">
+                        <div class="clearfix">
+                            {% for field in form %}
+                                <div class="col-xs-6">
+                                    <div class="form-group" style="position: relative;margin-bottom: 20px">
+                                        <label>{{ field.label }}</label>
+                                        {{ field }}
+                                        <span class="error-msg" style="color: red;position: absolute;"></span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">取 消</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">保 存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 删除的对话框 -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog-centered " style="margin-left: 700px" role="document">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h4>是否确认删除?</h4>
+                    <p style="margin: 10px 0">删除后，所有有关的数据都会被清除。</p>
+                    <p style="text-align: right;">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <button type="button" class="btn btn-danger" data-dismiss="alert" >取 消</button>
+                        <button id="btnConfirmDelete" type="button" class="btn btn-outline-secondary">确 认</button>
+                    </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+
+    <script type="text/javascript">
+
+
+        var DELETE_ID;
+        var EDIT_ID;
+
+        $(function (){
+            bindBtnAddEvent();
+            bindBtnSaveEvent();
+            bindBtnDeleteEvent();
+            btnConfirmDeleteEvent();
+            bindBtnEditEvent();
+        })
+        function bindBtnAddEvent() {
+            $("#btnAdd").click(function () {
+
+                // 将正在编辑的ID设置为空
+                EDIT_ID = undefined;
+
+                // 清空对话框中的数据
+                $("#formAdd")[0].reset()
+
+                // 设置对话框标题
+                $('#myModalLabel').text('新建');
+
+                // 点击新建，显示对话框
+                $('#myModal').modal('show')
+            });
+        }
+
+        function bindBtnSaveEvent(){
+            $('#btnSave').click(function () {
+
+                // 清除错误信息，向后台发送请求
+                $('.error-msg').empty();
+
+                if(EDIT_ID){
+                    // 编辑
+                    doEdit();
+                }else {
+                    // 添加
+                    doAdd();
+                }
+            });
+        }
+
+        function doEdit(){
+            $.ajax({
+                url:'/area/edit/' + '?uid=' + EDIT_ID,
+                type:'post',
+                data:$('#formAdd').serialize(),
+                dataType:'JSON',
+                success:function (res){
+                    if (res.status){
+
+                        // 自动清空表单
+                        $('#formAdd')[0].reset();
+
+                        // 自动关闭对话框
+                        $('#myModal').modal('hide')
+
+                        // 自动刷新页面
+                        location.reload();
+
+                    } else {
+                        if (res.tips){
+                            alert(res.tips);
+                        }else {
+
+                            // 把错误信息显示在对话框中
+                            $.each(res.error, function (name, errorList){
+                                $('#id_'+name).next().text(errorList[0]);
+                            })
+                        }
+                    }
+                }
+            })
+        }
+
+        function doAdd(){
+            $.ajax({
+                url:'/area/add/',
+                type:'post',
+                data:$('#formAdd').serialize(),
+                dataType:'JSON',
+                success:function (res){
+                    if (res.status){
+
+                        // 自动清空表单
+                        $('#formAdd')[0].reset();
+
+                        // 自动关闭对话框
+                        $('#myModal').modal('hide')
+
+                        // 自动刷新页面
+                        location.reload();
+                    } else {
+
+                        // 把错误信息显示在对话框中
+                        $.each(res.error, function (name, errorList){
+                            $('#id_'+name).next().text(errorList[0]);
+                        })
+                    }
+                }
+            })
+        }
+
+        function bindBtnDeleteEvent(){
+            $(".btn-delete").click(function () {
+
+                $("#deleteModal").modal('show');
+
+                DELETE_ID = $(this).attr('uid');
+            });
+
+        }
+
+        function btnConfirmDeleteEvent(){
+
+            $("#btnConfirmDelete").click(function () {
+                $.ajax({
+                    url: "/area/delete/",
+                    type: 'GET',
+                    data: {
+                        uid: DELETE_ID
+                    },
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if(res.status){
+                            location.reload();
+                        }else {
+                            alert(res.error);
+                        }
+                    }
+                })
+            });
+        }
+
+        function bindBtnEditEvent(){
+            $(".btn-edit").click(function () {
+
+                // 清空对话框中的数据
+                $("#formAdd")[0].reset()
+
+                var uid = $(this).attr('uid');
+                EDIT_ID = uid
+                // 发送Ajax去后端获取数据
+                $.ajax({
+                    url: "/area/detail/",
+                    type: "get",
+                    data: {
+                        uid: uid
+                    },
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status){
+                            // 将从后端获取的数据复制到对话框中的标签上
+                            $.each(res.data, function (name, value) {
+                                $("#id_" + name).val(value);
+                            })
+
+                            // 将对话框标题新建，修改成编辑
+                            $('#myModalLabel').text('编辑');
+
+                            // 点击编辑，显示对话框
+                            $('#myModal').modal('show');
+                        }else {
+                            alert(res.error);
+                        }
+                    }
+                })
+                // 在对话框中显示修改前的数据
+            })
+        }
+    </script>
+
+{% endblock %}

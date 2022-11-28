@@ -1,0 +1,83 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-hans">
+<head>
+    <link rel="stylesheet" href={% static 'plugins/bootstrap-4.6.1-dist/css/bootstrap.min.css' %} >
+    {% block css %} {% endblock %}
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href={% static 'plugins/bootstrap-4.6.1-dist/css/blog.css' %} >
+</head>
+<body>
+
+<div class="container">
+    <header class="blog-header py-3">
+        <div class="row flex-nowrap justify-content-end align-items-center">
+            <div class="col-4 d-flex justify-content-end align-items-center">
+                <a class=" btn-outline-secondary" style="margin-right: 15px" href="#">{{ request.session.info.name }}</a>
+                <a class="btn btn-xs btn-outline-danger" style="color: #ee3f4d" href="/logout/">注销</a>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="navbar-brand p-2 text-muted" href="/index/">主页</a>
+                    <a class="navbar-brand p-2 text-muted" href="/admin/list/">管理员</a>
+                    <div class="dropdown navbar-brand p-2 text-muted">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                            人员管理
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item p-2 text-muted" style="margin-left: 10px" href="/nurse/list/">医护人员</a>
+                            <a class="dropdown-item p-2 text-muted" style="margin-left: 10px" href="/resident/list/">社区住户</a>
+                        </div>
+                    </div>
+                    <a class="navbar-brand p-2 text-muted" href="/area/list/">摄像头信息</a>
+                    <a class="navbar-brand p-2 text-muted" href="/notice/list/">公告栏</a>
+                    <a class="navbar-brand p-2 text-muted" href="/chart/list/">疫情数据</a>
+                <div class="dropdown navbar-brand p-2 text-muted">
+                        <a class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        人脸管理
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item p-2 text-muted" style="margin-left: 10px" href="/face/regist/">人脸注册</a>
+                        <a class="dropdown-item p-2 text-muted" style="margin-left: 10px" href="/face/list/">人脸列表</a>
+                        <a class="dropdown-item p-2 text-muted" style="margin-left: 10px" href="/face/record/">人脸打卡</a>
+                    </div>
+                </div>
+                <a class="navbar-brand p-2 text-muted" href="/record/list/">通行记录</a>
+                <a class="navbar-brand p-2 text-muted" href="#">警报系统</a>
+
+    </nav>
+</div>
+
+<div>
+    {% block content %}{% endblock %}
+</div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-4.6.1-dist/js/bootstrap.min.js' %}"></script>
+{% block js %}{% endblock %}
+</body>
+</html>

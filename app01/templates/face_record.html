@@ -1,0 +1,31 @@
+{% extends 'layout.html' %}
+{% block content %}
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+
+    <link rel="start" href={% static 'plugins/bootstrap-4.6.1-dist/css/signin.css' %} >
+
+<body class="text-center">
+
+<form class="form-signin" method="post" novalidate>
+    {% csrf_token %}
+    <div class="tab-content">
+        <div class="tab-content-inner active" style="margin-left: 700px;width: 350px;" data-content="signup">
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label for="password2">点击打卡进行通行记录收集</label>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                   <button type="submit" class="btn btn-primary">打 卡</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+</body>
+</html>
+{% endblock %}

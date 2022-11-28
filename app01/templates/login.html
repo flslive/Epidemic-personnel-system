@@ -1,0 +1,58 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <title>封闭式社区疫情管理系统</title>
+    <link rel="stylesheet" href={% static 'plugins/bootstrap-4.6.1-dist/css/bootstrap.min.css' %} >
+    <link rel="stylesheet" href={% static 'plugins/bootstrap-4.6.1-dist/css/signin.css' %} >
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href={% static 'plugins/bootstrap-4.6.1-dist/css/signin.css' %} >
+</head>
+<body class="text-center">
+
+<form class="form-signin" method="post">
+    {% csrf_token %}
+    <h1 class="h4 mb-3 font-weight-normal">封闭式社区疫情管理系统</h1>
+    <div class="form-group">
+        <label></label>
+        {{ form.username }}
+        <span style="color: red;">{{ form.username.errors.0 }}</span>
+    </div>
+    <div class="form-group">
+        <label></label>
+        {{ form.password }}
+        <span style="color: red;">{{ form.password.errors.0 }}</span>
+    </div>
+    <div class="form-group">
+        <label for="id_code"></label>
+        <div class="row">
+            <div class="col-xs-7" style="margin-left: 15px">
+                {{ form.code }}
+                <span style="color: red;">{{ form.code.errors.0 }}</span>
+            </div>
+            <div class="col-xs-5">
+                <img id="image_code" src="/image/code/" style="width: 100px; height: 45px">
+            </div>
+        </div>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">登 录</button>
+</form>
+
+</body>
+</html>
+

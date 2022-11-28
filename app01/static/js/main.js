@@ -1,0 +1,1 @@
+let ctx,canvas;const $=s=>{return s[0]==":"?document.createElement(s.slice(1,s.length)):document.querySelector(s)},createCanvas=(w,h,p=$("body"))=>{canvas=$(":canvas");ctx=canvas.getContext("2d");canvas.width=w;canvas.height=h;p.appendChild(canvas)},background=b=>{canvas.style.background=b};

@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> 详情内容 </h3>
+            </div>
+            <div class="panel-body">
+                <form class="container" novalidate>
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label>{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

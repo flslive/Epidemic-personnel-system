@@ -1,0 +1,53 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+
+        <div class="jumbotron p-4 p-md-5 text-white rounded bg-dark" style="margin-top: 15px">
+            <div class="col-md-6 px-0">
+                <h1 class="display-4 font-italic">社区疫情数据</h1>
+                <p class="lead my-3">各楼阳性人员统计，社区住户健康情况，<br/>医护人员和社区住户比例......</p>
+                <p class="lead my-3"><a href="/chart/list/" class="text-white font-weight-bold">点 击 进 入...</a></p>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-primary">医 护 人 员</strong>
+                        <h3 class="mb-0">Featured post</h3>
+                        <p class="card-text mb-auto"><br/>点击查看医护人员详情信息</p>
+                        <a href="/nurse/list/" class="stretched-link">点 击 进 入...</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                             role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
+                             focusable="false"><title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c"/>
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                    <div class="col p-4 d-flex flex-column position-static">
+                        <strong class="d-inline-block mb-2 text-success">社 区 住 户</strong>
+                        <h3 class="mb-0">Post title</h3>
+                        <p class="mb-auto"><br/>点击查看医护人员详情信息</p>
+                        <a href="/resident/list/" class="stretched-link">点 击 进 入...</a>
+                    </div>
+                    <div class="col-auto d-none d-lg-block">
+                        <svg class="bd-placeholder-img" width="200" height="250" xmlns="http://www.w3.org/2000/svg"
+                             role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice"
+                             focusable="false"><title>Placeholder</title>
+                            <rect width="100%" height="100%" fill="#55595c"/>
+                            <text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

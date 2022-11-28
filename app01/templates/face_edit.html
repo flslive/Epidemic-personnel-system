@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div class="container">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title"> {{ title }} </h3>
+            </div>
+            <div class="panel-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">更 新</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

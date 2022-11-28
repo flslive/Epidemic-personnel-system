@@ -1,0 +1,47 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+    <div class="container">
+        <div style="margin-bottom: 15px" class="clearfix">
+            <div style="float: right;width: 350px;">
+                <form method="get">
+                    <div class="input-group" style="margin-top: 10px">
+                        <input type="text" name="q" style="margin-left: 50px" class="form-control" placeholder="关键字"
+                               value="{{ search_data }}">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                            </svg>
+                        </button>
+                      </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="p-2" style="color: #ee3f4d">通行记录不能被编辑及删除</div>
+            <table class="table table-bordered" >
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>姓名</th>
+                    <th>通行时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <th>{{ obj.id }}</th>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.current_time }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <ul class="pagination">
+            {{ page_string }}
+        </ul>
+    </div>
+
+
+{% endblock %}
