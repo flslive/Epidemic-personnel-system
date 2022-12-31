@@ -31,36 +31,34 @@ import copy
 """
 
 
-class Pagination(object):
+class Pagination(object):   # 分页组件
 
-    def __init__(self, request, queryset, page_size=10, page_param="page", plus=5):
+    def __init__(self, request, queryset, page_size=10, page_param="page", plus=5):     # plus表示页码的前后显示的页码数
 
-        query_dict = copy.deepcopy(request.GET)
-        query_dict._mutable = True
-        self.query_dict = query_dict
+        query_dict = copy.deepcopy(request.GET)     # 深拷贝，防止修改原来的request.GET
+        query_dict._mutable = True            # 修改query_dict的可变性
 
-        self.page_param = page_param
-        page = request.GET.get(page_param, "1")
+        self.query_dict = query_dict      # 用于生成页码的URL
+        self.page_param = page_param    # 页码参数名
+        page = request.GET.get(page_param, "1")     # 获取当前页码
 
-        if page.isdecimal():
-            page = int(page)
+        if page.isdecimal():    # 判断是否是数字
+            page = int(page)    # 转换成整数
         else:
-            page = 1
+            page = 1    # 如果不是数字，默认为1
 
-        self.page = page
-        self.page_size = page_size
+        self.page = page    # 当前页码
+        self.page_size = page_size      # 每页显示的数据条数
+        self.start = (page - 1) * page_size     # 切片的起始位置
+        self.end = page * page_size     # 切片的结束位置
+        self.page_queryset = queryset[self.start:self.end]      # 分页后的数据
 
-        self.start = (page - 1) * page_size
-        self.end = page * page_size
-
-        self.page_queryset = queryset[self.start:self.end]
-
-        total_count = queryset.count()
-        total_page_count, div = divmod(total_count, page_size)
-        if div:
+        total_count = queryset.count()      # 数据总条数
+        total_page_count, div = divmod(total_count, page_size)      # 总页数
+        if div:     # 如果有余数，总页数加1
             total_page_count += 1
-        self.total_page_count = total_page_count
-        self.plus = plus
+        self.total_page_count = total_page_count    # 总页数
+        self.plus = plus    # 页码前后显示的页码数
 
     def html(self):
         # 计算出，显示当前页的前5页、后5页
