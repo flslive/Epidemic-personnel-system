@@ -12,9 +12,9 @@ from aip import AipFace
 from app01 import models
 from app01.utils.form import RegisterModelForm
 
-APP_ID = "26756829"
-API_KEY = "u5wKSPbkHPsVPuYDOOPIllEw"
-SECRET_KEY = "97fjsv505GGBaoo6ODwSQmASftVGjOsI "
+APP_ID = ""
+API_KEY = ""
+SECRET_KEY = ""
 
 
 client = AipFace(APP_ID, API_KEY, SECRET_KEY)
